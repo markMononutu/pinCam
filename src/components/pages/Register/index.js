@@ -4,14 +4,14 @@ import { Link, useHistory } from "react-router-dom";
 
 import "../../../App.css";
 
-const Login = () => {
+const Register = () => {
   return (
     <div className="background">
       <div style={{ position: "absolute", marginTop: 80, marginLeft: 200 }}>
-        <h1 style={{ fontSize: 50 }}>Selamat Datang di PinCam !</h1>
+        <h1 style={{ fontSize: 50 }}>Buat Akunmu Sekarang</h1>
       </div>
       <div className="containerLogin">
-        <h1>Log In</h1>
+        <h1 className="text-center">Register</h1>
         <hr />
         <div style={{ width: "65%" }}>
           <Input
@@ -32,13 +32,18 @@ const Login = () => {
           <br />
           <Button
             block
-            text="Login"
+            text="Register"
             textColor="white"
-            color="black"
+            color="brown"
             //   onSubmit={handleSubmit}
           />
-          <Link to="/register" style={{ textDecoration: "none" }}>
-            <Button block text="Register" color="grey" textColor="white" />
+          <Link to="/" style={{ textDecoration: "none" }}>
+            <Button
+              block
+              text="Kembali ke Halaman Login"
+              color="grey"
+              textColor="white"
+            />
           </Link>
         </div>
       </div>
@@ -46,4 +51,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
