@@ -1,10 +1,41 @@
 import React, { useState } from "react";
 import { Button, Input } from "../../../components";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import firebase from "../../../config/Firebase";
 
 import "../../../App.css";
 
 const Register = () => {
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
+
+  const handleSubmit = () => {
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        const data = {
+          email: email,
+          fullName: fullName,
+        };
+        const userId = userCredential.user.uid;
+        console.log(userId);
+        firebase.database().ref(`users/${userId}`).set(data);
+
+        setFullName("");
+        setEmail("");
+        setPassword("");
+
+        navigate("/");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <div className="background">
       <div style={{ position: "absolute", marginTop: 80, marginLeft: 200 }}>
@@ -16,17 +47,24 @@ const Register = () => {
         <div style={{ width: "65%" }}>
           <Input
             className="form-control"
+            label="Nama Lengkap"
+            placeholder="Masukkan Nama Lengkap Anda"
+            value={fullName}
+            onChange={(event) => setFullName(event.target.value)}
+          />
+          <Input
+            className="form-control"
             label="Email"
             placeholder="Masukkan email"
-            //   value={email}
-            //   onChange={(event) => setEmail(event.target.value)}
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
           />
           <Input
             className="form-control"
             label="Password"
             placeholder="Masukkan password"
-            //   value={password}
-            //   onChange={(event) => setPassword(event.target.value)}
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
             type="password"
           />
           <br />
@@ -35,7 +73,7 @@ const Register = () => {
             text="Register"
             textColor="white"
             color="brown"
-            //   onSubmit={handleSubmit}
+            onSubmit={handleSubmit}
           />
           <Link to="/" style={{ textDecoration: "none" }}>
             <Button
