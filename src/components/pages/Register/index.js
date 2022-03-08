@@ -2,8 +2,17 @@ import React, { useState } from "react";
 import { Button, Input } from "../../../components";
 import { Link, useNavigate } from "react-router-dom";
 import firebase from "../../../config/Firebase";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 import "../../../App.css";
+
+const firebaseError = {
+  "auth/weak-password": "Password harus minimal 6 karakter",
+  "auth/invalid-email": "Masukkan kembali email yang benar",
+  "auth/email-already-in-use": "Email sudah digunakan pada akun lain",
+  else: "Server error.",
+};
 
 const Register = () => {
   const [fullName, setFullName] = useState("");
@@ -13,6 +22,15 @@ const Register = () => {
   const navigate = useNavigate();
 
   const handleSubmit = () => {
+    if (!fullName || !email || !password) {
+      const MySwal = withReactContent(Swal);
+
+      MySwal.fire({
+        title: <strong>Tidak Boleh ada yang kosong</strong>,
+        html: <i>Lengkapi datamu dulu yah!</i>,
+        icon: "warning",
+      });
+    }
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
@@ -29,10 +47,25 @@ const Register = () => {
         setEmail("");
         setPassword("");
 
+        const MySwal = withReactContent(Swal);
+
+        MySwal.fire({
+          title: <strong>Akun berhasil dibuat!</strong>,
+          html: <i>Login Menggunakan Akun Barumu</i>,
+          icon: "success",
+        });
+
         navigate("/");
       })
       .catch((error) => {
-        console.log(error);
+        console.log("error", error);
+        const MySwal = withReactContent(Swal);
+
+        MySwal.fire({
+          title: <strong>Gagal Login!</strong>,
+          html: <i>{firebaseError[error.code]}</i>,
+          icon: "error",
+        });
       });
   };
 

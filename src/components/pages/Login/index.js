@@ -2,8 +2,21 @@ import React, { useState } from "react";
 import { Button, Input } from "../../../components";
 import { Link, useNavigate } from "react-router-dom";
 import firebase from "firebase";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 import "../../../App.css";
+
+const firebaseError = {
+  "auth/invalid-email": "Kesalahan penulisan format email",
+
+  "auth/wrong-password": "Password Salah.",
+
+  "auth/user-not-found":
+    "Tidak ada data pengguna yang sesuai dengan pengenal yang diberikan.",
+
+  else: "Server error.",
+};
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -11,12 +24,47 @@ const Login = () => {
 
   const Navigate = useNavigate();
 
-  const handleSubmit = () => {
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .then((res) => Navigate("/dashboard"))
-      .catch((error) => console.log("error", error));
+  const handleSubmit = async () => {
+    if (!email && !password) {
+      const MySwal = withReactContent(Swal);
+
+      MySwal.fire({
+        title: <strong>Gagal Login!</strong>,
+        html: <i>Masukkan Email dan Password</i>,
+        icon: "error",
+      });
+    } else if (!email) {
+      const MySwal = withReactContent(Swal);
+
+      MySwal.fire({
+        title: <strong>Gagal Login!</strong>,
+        html: <i>Masukkan Email</i>,
+        icon: "error",
+      });
+    } else if (!password) {
+      const MySwal = withReactContent(Swal);
+
+      MySwal.fire({
+        title: <strong>Gagal Login!</strong>,
+        html: <i>Masukkan Password</i>,
+        icon: "error",
+      });
+    } else {
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password)
+        .then((res) => Navigate("/dashboard"))
+        .catch((error) => {
+          console.log("error", error);
+          const MySwal = withReactContent(Swal);
+
+          MySwal.fire({
+            title: <strong>Gagal Login!</strong>,
+            html: <i>{firebaseError[error.code]}</i>,
+            icon: "error",
+          });
+        });
+    }
   };
 
   return (
