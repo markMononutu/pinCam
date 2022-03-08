@@ -10,7 +10,7 @@ import "../../../App.css";
 const firebaseError = {
   "auth/weak-password": "Password harus minimal 6 karakter",
   "auth/invalid-email": "Masukkan kembali email yang benar",
-  "auth/email-already-in-use": "Email sudah digunakan pada akun lain",
+  "auth/email-already-in-use": "Email sudah didaftarkan pada akun lain",
   else: "Server error.",
 };
 
