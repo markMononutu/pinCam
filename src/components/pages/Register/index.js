@@ -38,6 +38,8 @@ const Register = () => {
         const data = {
           email: email,
           fullName: fullName,
+          address: "",
+          phoneNumber: "",
         };
         const userId = userCredential.user.uid;
         console.log(userId);

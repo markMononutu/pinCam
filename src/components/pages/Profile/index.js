@@ -1,76 +1,30 @@
-import React from "react";
-import "../../../components/assets/css/templatemo.min.css";
-import "../../../components/assets/css/templatemo.css";
-import "../../../components/assets/css/custom.css";
-import "../../../components/assets/css/bootstrap.min.css";
-import { useParams, Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Button } from "../../atoms";
+import { Link, useParams } from "react-router-dom";
+import firebase from "firebase";
 
-const Dashboard = () => {
+const Profile = () => {
   const { uid } = useParams();
-  console.log("uid di dashboard", uid);
+  const [users, setUsers] = useState({});
+
+  const getUserProfile = () => {
+    firebase
+      .database()
+      .ref(`users/${uid}`)
+      .on("value", (res) => {
+        if (res.val()) {
+          setUsers(res.val());
+        }
+        // setFirstName(SplitFullName(users.fullName));
+      });
+  };
+  useEffect(() => {
+    getUserProfile();
+  }, []);
+
   return (
     <div>
-      {/* <!-- Start Top Nav --> */}
-      <nav
-        className="navbar navbar-expand-lg bg-dark navbar-light d-none d-lg-block"
-        id="templatemo_nav_top"
-      >
-        <div className="container text-light">
-          <div className="w-100 d-flex justify-content-between">
-            <div>
-              <i className="fa fa-envelope mx-2"></i>
-              <a
-                className="navbar-sm-brand text-light text-decoration-none"
-                href="mailto:info@company.com"
-              >
-                info@company.com
-              </a>
-              <i className="fa fa-phone mx-2"></i>
-              <a
-                className="navbar-sm-brand text-light text-decoration-none"
-                href="tel:010-020-0340"
-              >
-                010-020-0340
-              </a>
-            </div>
-            <div>
-              <a
-                className="text-light"
-                href="https://fb.com/templatemo"
-                target="_blank"
-                rel="sponsored"
-              >
-                <i className="fab fa-facebook-f fa-sm fa-fw me-2"></i>
-              </a>
-              <a
-                className="text-light"
-                href="https://www.instagram.com/"
-                target="_blank"
-              >
-                <i className="fab fa-instagram fa-sm fa-fw me-2"></i>
-              </a>
-              <a
-                className="text-light"
-                href="https://twitter.com/"
-                target="_blank"
-              >
-                <i className="fab fa-twitter fa-sm fa-fw me-2"></i>
-              </a>
-              <a
-                className="text-light"
-                href="https://www.linkedin.com/"
-                target="_blank"
-              >
-                <i className="fab fa-linkedin fa-sm fa-fw"></i>
-              </a>
-            </div>
-          </div>
-        </div>
-      </nav>
-      {/* <!-- Close Top Nav -->
-
-
-    <!-- Header --> */}
+      {/* Header */}
       <nav className="navbar navbar-expand-lg navbar-light shadow">
         <div className="container d-flex justify-content-between align-items-center">
           <a
@@ -149,19 +103,73 @@ const Dashboard = () => {
                 <i className="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
                 <span className="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark"></span>
               </a>
-              <Link to={`/${uid}/profile`} style={{ textDecoration: "none" }}>
-                <div className="nav-icon position-relative text-decoration-none">
-                  <i className="fa fa-fw fa-user text-dark mr-3"></i>
-                  <span className="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark"></span>
-                </div>
-              </Link>
+              <a
+                className="nav-icon position-relative text-decoration-none"
+                href="/profile"
+              >
+                <i className="fa fa-fw fa-user text-dark mr-3"></i>
+                <span className="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark"></span>
+              </a>
             </div>
           </div>
         </div>
       </nav>
       {/* <!-- Close Header --> */}
+      <div class="container rounded bg-white mt-5 mb-5">
+        <div class="row">
+          <div class="col-md-3 border-right">
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+              <img
+                class="rounded-circle mt-5"
+                width="150px"
+                src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"
+              />
+              <span class="font-weight-bold">Edogaru</span>
+              <span class="text-black-50">edogaru@mail.com.my</span>
+              <span> </span>
+            </div>
+          </div>
+          <div class="col-md-5 border-right">
+            <div class="p-3 py-5">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="text-right">Profile</h4>
+              </div>
+
+              {/* Profile */}
+              <h6>Full Name</h6>
+              <h4>{users.fullName}</h4>
+              <br />
+              <h6>Email</h6>
+              <h4>{users.email}</h4>
+              <br />
+              <h6>Address</h6>
+              <h4>{users.address}</h4>
+              <br />
+              <h6>Phone Number</h6>
+              <h4>{users.phoneNumber}</h4>
+
+              {/* End of Profile */}
+
+              <div class="row mt-2"></div>
+              <div class="mt-5 text-center">
+                <Link
+                  to={`/${uid}/editProfile`}
+                  style={{ textDecoration: "none" }}
+                >
+                  <Button
+                    block
+                    text="Edit Profil"
+                    color="black"
+                    textColor="white"
+                  />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
 
-export default Dashboard;
+export default Profile;
