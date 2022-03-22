@@ -53,7 +53,11 @@ const Login = () => {
       firebase
         .auth()
         .signInWithEmailAndPassword(email, password)
-        .then((res) => Navigate("/dashboard"))
+        .then((res) => {
+          const uid = res.user.uid;
+          // console.log(res.user.uid);
+          Navigate(`/${uid}/dashboard`);
+        })
         .catch((error) => {
           console.log("error", error);
           const MySwal = withReactContent(Swal);
