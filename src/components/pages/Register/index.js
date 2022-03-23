@@ -30,45 +30,57 @@ const Register = () => {
         html: <i>Lengkapi datamu dulu yah!</i>,
         icon: "warning",
       });
+    } else {
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          const data = {
+            email: email,
+            fullName: fullName,
+            address: "",
+            phoneNumber: "",
+          };
+          const userId = userCredential.user.uid;
+          console.log(userId);
+          firebase.database().ref(`users/${userId}`).set(data);
+
+          setFullName("");
+          setEmail("");
+          setPassword("");
+
+          const MySwal = withReactContent(Swal);
+
+          MySwal.fire({
+            title: <strong>Akun berhasil dibuat!</strong>,
+            html: <i>Login Menggunakan Akun Barumu</i>,
+            icon: "success",
+          });
+
+          navigate("/");
+        })
+        .catch((error) => {
+          console.log("error", error);
+          const MySwal = withReactContent(Swal);
+
+          MySwal.fire({
+            title: <strong>Gagal Mendaftar!</strong>,
+            html: <i>{firebaseError[error.code]}</i>,
+            icon: "error",
+          });
+        });
     }
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then((userCredential) => {
-        const data = {
-          email: email,
-          fullName: fullName,
-          address: "",
-          phoneNumber: "",
-        };
-        const userId = userCredential.user.uid;
-        console.log(userId);
-        firebase.database().ref(`users/${userId}`).set(data);
 
-        setFullName("");
-        setEmail("");
-        setPassword("");
+    // .catch((error) => {
+    //   console.log("error", error);
+    //   const MySwal = withReactContent(Swal);
 
-        const MySwal = withReactContent(Swal);
-
-        MySwal.fire({
-          title: <strong>Akun berhasil dibuat!</strong>,
-          html: <i>Login Menggunakan Akun Barumu</i>,
-          icon: "success",
-        });
-
-        navigate("/");
-      })
-      .catch((error) => {
-        console.log("error", error);
-        const MySwal = withReactContent(Swal);
-
-        MySwal.fire({
-          title: <strong>Gagal Login!</strong>,
-          html: <i>{firebaseError[error.code]}</i>,
-          icon: "error",
-        });
-      });
+    //   MySwal.fire({
+    //     title: <strong>Gagal Login!</strong>,
+    //     html: <i>{firebaseError[error.code]}</i>,
+    //     icon: "error",
+    //   });
+    // });
   };
 
   return (
