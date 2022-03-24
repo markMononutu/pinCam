@@ -124,8 +124,8 @@ const Profile = () => {
                 width="150px"
                 src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"
               />
-              <span class="font-weight-bold">Edogaru</span>
-              <span class="text-black-50">edogaru@mail.com.my</span>
+              <span class="font-weight-bold">{users.fullName}</span>
+              <span class="text-black-50">{users.email}</span>
               <span> </span>
             </div>
           </div>
