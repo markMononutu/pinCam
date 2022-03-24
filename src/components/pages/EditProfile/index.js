@@ -32,8 +32,95 @@ const Profile = () => {
       phoneNumber: phoneNumber,
       address: address,
     };
-    firebase.database().ref(`users/${uid}`).set(data);
-    navigate(`/${uid}/profile`);
+    const dataWithoutfullName = {
+      fullName: users.fullName,
+      email: users.email,
+      phoneNumber: phoneNumber,
+      address: address,
+    };
+    const dataWithoutPhoneNumber = {
+      fullName: fullName,
+      email: users.email,
+      phoneNumber: users.phoneNumber,
+      address: address,
+    };
+    const dataWithoutAddress = {
+      fullName: fullName,
+      email: users.email,
+      phoneNumber: phoneNumber,
+      address: users.address,
+    };
+
+    const dataWithoutfullNameAndPhoneNumber = {
+      fullName: users.fullName,
+      email: users.email,
+      phoneNumber: users.phoneNumber,
+      address: address,
+    };
+    const dataWithoutFullNameAndAddress = {
+      fullName: users.fullName,
+      email: users.email,
+      phoneNumber: phoneNumber,
+      address: users.address,
+    };
+    const dataWithoutPhoneNumberAndAddress = {
+      fullName: fullName,
+      email: users.email,
+      phoneNumber: users.phoneNumber,
+      address: users.address,
+    };
+
+    const dataWithoutAll = {
+      fullName: users.fullName,
+      email: users.email,
+      phoneNumber: users.phoneNumber,
+      address: users.address,
+    };
+    if (!fullName && !phoneNumber && !address) {
+      firebase.database().ref(`users/${uid}`).set(dataWithoutAll);
+      console.log("withoutAll");
+      navigate(`/${uid}/profile`);
+    } else if (!fullName && !phoneNumber) {
+      firebase
+        .database()
+        .ref(`users/${uid}`)
+        .set(dataWithoutfullNameAndPhoneNumber);
+      console.log("withoutFullNameAndPhoneNumber");
+      navigate(`/${uid}/profile`);
+    } else if (!fullName && !address) {
+      firebase
+        .database()
+        .ref(`users/${uid}`)
+        .set(dataWithoutFullNameAndAddress);
+      console.log("withoutFullNameAndAddress");
+      navigate(`/${uid}/profile`);
+    } else if (!phoneNumber && !address) {
+      firebase
+        .database()
+        .ref(`users/${uid}`)
+        .set(dataWithoutPhoneNumberAndAddress);
+      console.log("withoutPhoneNumberAndAddress");
+      navigate(`/${uid}/profile`);
+    } else if (!fullName) {
+      firebase.database().ref(`users/${uid}`).set(dataWithoutfullName);
+      console.log("withoutFullName");
+      navigate(`/${uid}/profile`);
+    } else if (!phoneNumber) {
+      firebase.database().ref(`users/${uid}`).set(dataWithoutPhoneNumber);
+      console.log("withoutPhoneNumber");
+      navigate(`/${uid}/profile`);
+    } else if (!address) {
+      firebase.database().ref(`users/${uid}`).set(dataWithoutAddress);
+      console.log("withoutAddress");
+      navigate(`/${uid}/profile`);
+    } else {
+      firebase.database().ref(`users/${uid}`).set(data);
+      console.log("with all (else)");
+      navigate(`/${uid}/profile`);
+    }
+    console.log("nama", fullName);
+    console.log("alamat", address);
+    console.log("nomor", phoneNumber);
   };
   useEffect(() => {
     getUserProfile();
@@ -140,8 +227,8 @@ const Profile = () => {
                 width="150px"
                 src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"
               />
-              <span class="font-weight-bold">Edogaru</span>
-              <span class="text-black-50">edogaru@mail.com.my</span>
+              <span class="font-weight-bold">{users.fullName}</span>
+              <span class="text-black-50">{users.email}</span>
               <span> </span>
             </div>
           </div>
@@ -157,21 +244,30 @@ const Profile = () => {
                 label="Full Name"
                 placeholder="Masukkan nama"
                 defaultValue={users.fullName}
-                onChangeText={(fullName) => setFullName(fullName)}
+                // value={fullName}
+                onChange={(event) => setFullName(event.target.value)}
+                // defaultValue={users.fullName}
+                // onChangeText={(fullName) => setFullName(fullName)}
               />
               <Input
                 className="form-control"
                 label="Phone Number"
                 placeholder="Masukkan nomor telepon"
                 defaultValue={users.phoneNumber}
-                onChangeText={(phoneNumber) => setPhoneNumber(phoneNumber)}
+                // value={phoneNumber}
+                onChange={(event) => setPhoneNumber(event.target.value)}
+                // defaultValue={users.phoneNumber}
+                // onChangeText={(phoneNumber) => setPhoneNumber(phoneNumber)}
               />
               <Input
                 className="form-control"
                 label="Address"
                 placeholder="Masukkan Alamat"
                 defaultValue={users.address}
-                onChangeText={(address) => setAddress(address)}
+                // value={address}
+                onChange={(event) => setAddress(event.target.value)}
+                // defaultValue={users.address}
+                // onChangeText={(address) => setAddress(address)}
               />
 
               {/* End of Profile */}
