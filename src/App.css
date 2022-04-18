@@ -21,3 +21,24 @@
   margin-top: 40px;
   padding-top: 60px;
 }
+
+.UserType {
+  display: flex;
+  align-items: center;
+
+  flex-direction: column;
+  height: 80vh;
+  width: 30vw;
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(8.5px);
+  border-radius: 10px;
+  color: black;
+  text-transform: uppercase;
+  letter-spacing: 0.2rem;
+  position: absolute;
+  right: 35%;
+  align-self: center;
+  margin-top: 40px;
+  padding-top: 80px;
+}

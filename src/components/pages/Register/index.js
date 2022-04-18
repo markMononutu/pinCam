@@ -40,10 +40,11 @@ const Register = () => {
             fullName: fullName,
             address: "",
             phoneNumber: "",
+            jenisPengguna: "penyewa",
           };
           const userId = userCredential.user.uid;
           console.log(userId);
-          firebase.database().ref(`users/${userId}`).set(data);
+          firebase.database().ref(`users/penyewa/${userId}`).set(data);
 
           setFullName("");
           setEmail("");

@@ -18,7 +18,7 @@ const firebaseError = {
   else: "Server error.",
 };
 
-const Login = () => {
+const LoginRental = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -56,7 +56,7 @@ const Login = () => {
         .then((res) => {
           const uid = res.user.uid;
           // console.log(res.user.uid);
-          Navigate(`/${uid}/dashboard`);
+          Navigate(`/${uid}/dashboardRental`);
         })
         .catch((error) => {
           console.log("error", error);
@@ -83,7 +83,7 @@ const Login = () => {
             textAlign: "center",
           }}
         >
-          Silahkan Masuk dengan akun Penyewa
+          Silahkan Masuk dengan akun Rental
         </h1>
       </div>
       <div className="containerLogin">
@@ -113,13 +113,10 @@ const Login = () => {
             color="black"
             onSubmit={handleSubmit}
           />
-          <Link to="/register" style={{ textDecoration: "none" }}>
-            <Button block text="Register" color="grey" textColor="white" />
-          </Link>
         </div>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default LoginRental;
