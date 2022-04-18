@@ -24,7 +24,7 @@ const Profile = () => {
 
   return (
     <div>
-      {/* Header */}
+      {/* Start Header */}
       <nav className="navbar navbar-expand-lg navbar-light shadow">
         <div className="container d-flex justify-content-between align-items-center">
           <a
@@ -51,25 +51,15 @@ const Profile = () => {
             id="templatemo_main_nav"
           >
             <div className="flex-fill">
-              <ul className="nav navbar-nav d-flex justify-content-between mx-lg-auto">
+              <ul className="nav  mx-lg-auto">
                 <li className="nav-item">
-                  <a className="nav-link" href="/dashboard">
+                  <a className="nav-link" href={`/${uid}/dashboard`}>
                     Home
                   </a>
                 </li>
                 <li className="nav-item">
                   <a className="nav-link" href="/">
                     About
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="shop.html">
-                    Shop
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="contact.html">
-                    Contact
                   </a>
                 </li>
               </ul>
@@ -103,13 +93,12 @@ const Profile = () => {
                 <i className="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
                 <span className="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark"></span>
               </a>
-              <a
-                className="nav-icon position-relative text-decoration-none"
-                href="/profile"
-              >
-                <i className="fa fa-fw fa-user text-dark mr-3"></i>
-                <span className="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark"></span>
-              </a>
+              <Link to={`/${uid}/profile`} style={{ textDecoration: "none" }}>
+                <div className="nav-icon position-relative text-decoration-none">
+                  <i className="fa fa-fw fa-user text-dark mr-3"></i>
+                  <span className="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark"></span>
+                </div>
+              </Link>
             </div>
           </div>
         </div>
