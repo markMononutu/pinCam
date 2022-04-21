@@ -16,7 +16,7 @@ const Profile = () => {
   const getUserProfile = () => {
     firebase
       .database()
-      .ref(`users/${uid}`)
+      .ref(`users/penyewa/${uid}`)
       .on("value", (res) => {
         if (res.val()) {
           setUsers(res.val());
@@ -77,44 +77,47 @@ const Profile = () => {
       address: users.address,
     };
     if (!fullName && !phoneNumber && !address) {
-      firebase.database().ref(`users/${uid}`).set(dataWithoutAll);
+      firebase.database().ref(`users/penyewa/${uid}`).set(dataWithoutAll);
       console.log("withoutAll");
       navigate(`/${uid}/profile`);
     } else if (!fullName && !phoneNumber) {
       firebase
         .database()
-        .ref(`users/${uid}`)
+        .ref(`users/penyewa/${uid}`)
         .set(dataWithoutfullNameAndPhoneNumber);
       console.log("withoutFullNameAndPhoneNumber");
       navigate(`/${uid}/profile`);
     } else if (!fullName && !address) {
       firebase
         .database()
-        .ref(`users/${uid}`)
+        .ref(`users/penyewa/${uid}`)
         .set(dataWithoutFullNameAndAddress);
       console.log("withoutFullNameAndAddress");
       navigate(`/${uid}/profile`);
     } else if (!phoneNumber && !address) {
       firebase
         .database()
-        .ref(`users/${uid}`)
+        .ref(`users/penyewa/${uid}`)
         .set(dataWithoutPhoneNumberAndAddress);
       console.log("withoutPhoneNumberAndAddress");
       navigate(`/${uid}/profile`);
     } else if (!fullName) {
-      firebase.database().ref(`users/${uid}`).set(dataWithoutfullName);
+      firebase.database().ref(`users/penyewa/${uid}`).set(dataWithoutfullName);
       console.log("withoutFullName");
       navigate(`/${uid}/profile`);
     } else if (!phoneNumber) {
-      firebase.database().ref(`users/${uid}`).set(dataWithoutPhoneNumber);
+      firebase
+        .database()
+        .ref(`users/penyewa/${uid}`)
+        .set(dataWithoutPhoneNumber);
       console.log("withoutPhoneNumber");
       navigate(`/${uid}/profile`);
     } else if (!address) {
-      firebase.database().ref(`users/${uid}`).set(dataWithoutAddress);
+      firebase.database().ref(`users/penyewa/${uid}`).set(dataWithoutAddress);
       console.log("withoutAddress");
       navigate(`/${uid}/profile`);
     } else {
-      firebase.database().ref(`users/${uid}`).set(data);
+      firebase.database().ref(`users/penyewa/${uid}`).set(data);
       console.log("with all (else)");
       navigate(`/${uid}/profile`);
     }

@@ -153,7 +153,7 @@ const UpdatePage = () => {
     // Mengubah Biaya dan Deksripsi
     else if (!nama) {
       const dataWithoutNama = {
-        namaProduk: produk.nama,
+        namaProduk: produk.namaProduk,
         deskripsi: deskripsi,
         biaya: biaya,
         gambar: produk.gambar,

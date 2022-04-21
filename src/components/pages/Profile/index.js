@@ -10,7 +10,7 @@ const Profile = () => {
   const getUserProfile = () => {
     firebase
       .database()
-      .ref(`users/${uid}`)
+      .ref(`users/penyewa/${uid}`)
       .on("value", (res) => {
         if (res.val()) {
           setUsers(res.val());
