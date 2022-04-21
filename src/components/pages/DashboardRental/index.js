@@ -4,14 +4,18 @@ import "../../../components/assets/css/templatemo.css";
 import "../../../components/assets/css/custom.css";
 import "../../../components/assets/css/bootstrap.min.css";
 
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import firebase from "../../../config/Firebase";
 import { Button } from "../../atoms";
 
 const DashboardRental = () => {
   const { uid } = useParams();
+  const Navigate = useNavigate();
   const [onRental, setOnRental] = useState(false);
   const [barang, setBarang] = useState([]);
+  const handleUpdate = (key) => {
+    Navigate(`/${uid}/update/${key.id}`);
+  };
 
   useEffect(() => {
     firebase
@@ -46,6 +50,10 @@ const DashboardRental = () => {
         }
       });
   }, []);
+
+  const handleDelete = (key) => {
+    firebase.database().ref(`users/rental/${uid}/barang/${key.id}`).remove();
+  };
 
   return onRental === true ? (
     <div>
@@ -121,7 +129,7 @@ const DashboardRental = () => {
                     text="Update"
                     color="#F28F27"
                     textColor="white"
-                    //   onSubmit={() => handleUpdate(key)}
+                    onSubmit={() => handleUpdate(key)}
                   />
                 </td>
                 <td>
@@ -129,7 +137,7 @@ const DashboardRental = () => {
                     text="Hapus"
                     color="red"
                     textColor="white"
-                    // onSubmit={() => handleDelete(key)}
+                    onSubmit={() => handleDelete(key)}
                   />
                 </td>
               </tr>
