@@ -1,49 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import { Button } from "../../atoms";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import firebase from "firebase";
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
+import firebase from "../../../config/Firebase";
 
-const Profile = () => {
-  const navigate = useNavigate();
-  const { uid } = useParams();
-  const [users, setUsers] = useState({});
+const ProductDetail = () => {
+  const { uid, productID } = useParams();
 
-  const onExit = () => {
-    Swal.fire({
-      title: "Ingin Keluar?",
-      text: "Klik Yakin untuk Keluar",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yakin",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire(
-          "Kamu telah keluar dari PinCam!",
-          "Kembali masuk untuk menikmati layanan PinCam",
-          "success"
-        );
-        navigate("/");
-      }
-    });
-  };
+  const [product, setProduct] = useState({});
+  const [biaya, setBiaya] = useState("");
 
-  const getUserProfile = () => {
+  useEffect(() => {
     firebase
       .database()
-      .ref(`users/penyewa/${uid}`)
+      .ref(`users/rental/PmpiG950r3ZsLxuvx6tdTX6rEvg1/barang/${productID}`)
       .on("value", (res) => {
         if (res.val()) {
-          setUsers(res.val());
+          setProduct(res.val());
+          setBiaya(res.val().biaya);
         }
         // setFirstName(SplitFullName(users.fullName));
       });
-  };
-  useEffect(() => {
-    getUserProfile();
   }, []);
 
   return (
@@ -132,23 +108,7 @@ const Profile = () => {
         <div class="row">
           <div class="col-md-3 border-right">
             <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-              <img
-                class="rounded-circle mt-5"
-                width="150px"
-                src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"
-              />
-              <span class="font-weight-bold">{users.fullName}</span>
-              <span class="text-black-50">{users.email}</span>
-              <br />
-              <span>
-                <Button
-                  text="Keluar"
-                  width={200}
-                  textColor="white"
-                  color="red"
-                  onSubmit={onExit}
-                />
-              </span>
+              <img src={product.gambar} style={{ height: 300, width: 300 }} />
             </div>
           </div>
           <div class="col-md-5 border-right">
@@ -158,33 +118,29 @@ const Profile = () => {
               </div>
 
               {/* Profile */}
-              <h6>Full Name</h6>
-              <h4>{users.fullName}</h4>
+              <h6>Nama Barang</h6>
+              <h4>{product.namaProduk}</h4>
               <br />
-              <h6>Email</h6>
-              <h4>{users.email}</h4>
+              <h6>Biaya Perjam</h6>
+              <h4>
+                {" "}
+                Rp.
+                {biaya.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
+              </h4>
               <br />
-              <h6>Address</h6>
-              <h4>{users.address}</h4>
-              <br />
-              <h6>Phone Number</h6>
-              <h4>{users.phoneNumber}</h4>
+              <h6>Deskripsi</h6>
+              <h4>{product.deskripsi}</h4>
 
               {/* End of Profile */}
 
               <div class="row mt-2"></div>
               <div class="mt-5 text-center">
-                <Link
-                  to={`/${uid}/editProfile`}
-                  style={{ textDecoration: "none" }}
-                >
-                  <Button
-                    block
-                    text="Edit Profil"
-                    color="black"
-                    textColor="white"
-                  />
-                </Link>
+                <Button
+                  block
+                  text="Ajukan Penyewaan"
+                  color="green"
+                  textColor="white"
+                />
               </div>
             </div>
           </div>
@@ -194,4 +150,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default ProductDetail;

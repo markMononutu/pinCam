@@ -3,13 +3,16 @@ import "../../../components/assets/css/templatemo.min.css";
 import "../../../components/assets/css/templatemo.css";
 import "../../../components/assets/css/custom.css";
 import "../../../components/assets/css/bootstrap.min.css";
+import "../../../App.css";
 
 import { useParams, Link } from "react-router-dom";
 import firebase from "../../../config/Firebase";
+import ProdukCard from "../../molecule/ProductCard";
 
 const Dashboard = () => {
   const { uid } = useParams();
   const [onPenyewa, setOnPenyewa] = useState(false);
+  const [barang, setBarang] = useState([]);
 
   useEffect(() => {
     firebase
@@ -18,6 +21,29 @@ const Dashboard = () => {
       .on("value", (res) => {
         if (res.val()) {
           setOnPenyewa(true);
+        }
+      });
+  }, []);
+
+  useEffect(() => {
+    firebase
+      .database()
+      .ref(`users/rental/PmpiG950r3ZsLxuvx6tdTX6rEvg1/barang`)
+      .on("value", (res) => {
+        if (res.val()) {
+          //ubah menjadi array object
+          const rawData = res.val();
+          const productArray = [];
+          // console.log(keranjang[0].namaProduk);
+          Object.keys(rawData).map((key) => {
+            productArray.push({
+              id: key,
+              ...rawData[key],
+            });
+          });
+          setBarang(productArray);
+
+          // console.log(products);
         }
       });
   }, []);
@@ -58,7 +84,7 @@ const Dashboard = () => {
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="/">
+                  <a className="nav-link" href={`/${uid}/aboutP`}>
                     About
                   </a>
                 </li>
@@ -104,10 +130,31 @@ const Dashboard = () => {
         </div>
       </nav>
       {/* <!-- Close Header --> */}
+      <div style={{ paddingLeft: 20 }}>
+        {barang ? (
+          <div className="productContainer">
+            {barang.map((key) => (
+              <ProdukCard
+                gambar={`${key.gambar}`}
+                namaProduk={key.namaProduk}
+                link={`/${uid}/${key.id}`}
+              />
+            ))}
+          </div>
+        ) : (
+          <div>
+            <h1>Tidak ada barang</h1>
+          </div>
+        )}
+      </div>
     </div>
   ) : (
     <div>
-      <h1>Kamu mungkin tidak menggunakan akun penyewa</h1>
+      <h1>Memuat...</h1>
+      <h1>
+        Jika tetap berada pada halaman ini, kamu mungkin tidak menggunakan akun
+        penyewa
+      </h1>
     </div>
   );
 };

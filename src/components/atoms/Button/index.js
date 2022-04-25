@@ -6,6 +6,7 @@ const Button = ({
   color = "#4260f5",
   textColor = "black",
   height,
+  width,
   ...rest
 }) => {
   return (
@@ -14,7 +15,12 @@ const Button = ({
         type="button"
         className="btn mb-3"
         onClick={onSubmit}
-        style={{ backgroundColor: color, color: textColor, height: height }}
+        style={{
+          backgroundColor: color,
+          color: textColor,
+          height: height,
+          width: width,
+        }}
         {...rest}
       >
         {text}
