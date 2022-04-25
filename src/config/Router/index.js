@@ -11,6 +11,7 @@ import LoginRental from "../../components/pages/LoginRental";
 import DashboardRental from "../../components/pages/DashboardRental";
 import TambahBarang from "../../components/pages/TambahBarang/index.";
 import UpdatePage from "../../components/pages/UpdatePage";
+import ProductDetail from "../../components/pages/ProductDetail";
 
 const RouterConfig = () => {
   return (
@@ -29,6 +30,7 @@ const RouterConfig = () => {
         <Route path="/:uid/profile" element={<Profile />}></Route>
         <Route path="/:uid/editProfile" element={<EditProfile />}></Route>
         <Route path="/:uid/tambahBarang" element={<TambahBarang />}></Route>
+        <Route path="/:uid/:productID" element={<ProductDetail />}></Route>
       </Routes>
     </BrowserRouter>
   );

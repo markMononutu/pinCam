@@ -3,6 +3,7 @@ import "../../../components/assets/css/templatemo.min.css";
 import "../../../components/assets/css/templatemo.css";
 import "../../../components/assets/css/custom.css";
 import "../../../components/assets/css/bootstrap.min.css";
+import Swal from "sweetalert2";
 
 import { useParams, Link, useNavigate } from "react-router-dom";
 import firebase from "../../../config/Firebase";
@@ -55,6 +56,27 @@ const DashboardRental = () => {
     firebase.database().ref(`users/rental/${uid}/barang/${key.id}`).remove();
   };
 
+  const onExit = () => {
+    Swal.fire({
+      title: "Ingin Keluar?",
+      text: "Klik Yakin untuk Keluar",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yakin",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire(
+          "Kamu telah keluar dari PinCam!",
+          "Kembali masuk untuk menikmati layanan PinCam",
+          "success"
+        );
+        Navigate("/");
+      }
+    });
+  };
+
   return onRental === true ? (
     <div>
       {/* Start Header */}
@@ -93,6 +115,11 @@ const DashboardRental = () => {
                 <li className="nav-item">
                   <a className="nav-link" href="/about">
                     About
+                  </a>
+                </li>
+                <li className="nav-item">
+                  <a className="nav-link" onClick={onExit}>
+                    Keluar
                   </a>
                 </li>
               </ul>
@@ -152,7 +179,11 @@ const DashboardRental = () => {
     </div>
   ) : (
     <div>
-      <h1>Kamu mungkin tidak menggunakan akun rental</h1>
+      <h1>Memuat...</h1>
+      <h1>
+        Jika tetap berada pada halaman ini, kamu mungkin tidak menggunakan akun
+        Rental
+      </h1>
     </div>
   );
 };
