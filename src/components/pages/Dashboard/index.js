@@ -8,11 +8,13 @@ import "../../../App.css";
 import { useParams, Link } from "react-router-dom";
 import firebase from "../../../config/Firebase";
 import ProdukCard from "../../molecule/ProductCard";
+import { Input } from "../../atoms";
 
 const Dashboard = () => {
   const { uid } = useParams();
   const [onPenyewa, setOnPenyewa] = useState(false);
   const [barang, setBarang] = useState([]);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     firebase
@@ -130,20 +132,44 @@ const Dashboard = () => {
         </div>
       </nav>
       {/* <!-- Close Header --> */}
+      <Input
+        placeholder="Cari barang"
+        className="form-control"
+        style={{ marginLeft: 20 }}
+        value={search}
+        onChange={(event) => setSearch(event.target.value)}
+      />
+
       <div style={{ paddingLeft: 20 }}>
-        {barang ? (
-          <div className="productContainer">
-            {barang.map((key) => (
-              <ProdukCard
-                gambar={`${key.gambar}`}
-                namaProduk={key.namaProduk}
-                link={`/${uid}/${key.id}`}
-              />
-            ))}
-          </div>
+        {search.length === 0 ? (
+          barang ? (
+            <div className="productContainer">
+              {barang.map((key) => (
+                <ProdukCard
+                  gambar={`${key.gambar}`}
+                  namaProduk={key.namaProduk}
+                  link={`/${uid}/${key.id}`}
+                />
+              ))}
+            </div>
+          ) : (
+            <div>
+              <h1>Tidak ada barang</h1>
+            </div>
+          )
         ) : (
-          <div>
-            <h1>Tidak ada barang</h1>
+          <div className="productContainer">
+            {barang
+              .filter((produk) =>
+                produk.namaProduk.toLowerCase().includes(search.toLowerCase())
+              )
+              .map((key) => (
+                <ProdukCard
+                  gambar={`${key.gambar}`}
+                  namaProduk={key.namaProduk}
+                  link={`/${uid}/${key.id}`}
+                />
+              ))}
           </div>
         )}
       </div>
