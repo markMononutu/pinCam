@@ -59,6 +59,18 @@
   text-align: center;
 }
 
+.transaksiCard {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  margin-left: 50px;
+  margin-top: 20px;
+  margin-right: 50%;
+  padding-left: 20px;
+}
+
 .link {
   color: black;
 }

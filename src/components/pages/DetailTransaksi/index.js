@@ -1,56 +1,48 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import Swal from "sweetalert2";
 import { Button } from "../../atoms";
 import firebase from "../../../config/Firebase";
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
 
-const ProductDetail = () => {
-  const { uid, productID } = useParams();
-  const navigate = useNavigate();
-
-  const [product, setProduct] = useState({});
+const DetailTransaksi = () => {
+  const { uid, idTransaksi } = useParams();
+  const [transaksi, setTransaksi] = useState({});
   const [biaya, setBiaya] = useState("");
-  const [users, setUsers] = useState({});
+  const [total, setTotal] = useState("");
+  const Navigate = useNavigate();
 
   useEffect(() => {
     firebase
       .database()
-      .ref(`users/rental/PmpiG950r3ZsLxuvx6tdTX6rEvg1/barang/${productID}`)
+      .ref(`transaksi/${idTransaksi}`)
       .on("value", (res) => {
         if (res.val()) {
-          setProduct(res.val());
-          setBiaya(res.val().biaya);
+          setTransaksi(res.val());
+          setBiaya(res.val().biayaPerjam);
+          setTotal(res.val().total);
         }
-        // setFirstName(SplitFullName(users.fullName));
       });
   }, []);
 
-  useEffect(() => {
-    firebase
-      .database()
-      .ref(`users/penyewa/${uid}`)
-      .on("value", (res) => {
-        if (res.val()) {
-          setUsers(res.val());
-        }
-        console.log("users", users);
-        // setFirstName(SplitFullName(users.fullName));
-      });
-  }, []);
-
-  const handleSubmit = () => {
-    if (product.status !== "ready") {
-      const MySwal = withReactContent(Swal);
-
-      MySwal.fire({
-        title: <strong>Gagal Mengirimkan Permintaan</strong>,
-        html: <i>Barang Sedang Dipinjam Pengguna Lain</i>,
-        icon: "error",
-      });
-    } else {
-      navigate(`/${uid}/${productID}/pesan`);
-    }
+  const onExit = () => {
+    Swal.fire({
+      title: "Ingin Keluar?",
+      text: "Klik Yakin untuk Keluar",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yakin",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire(
+          "Kamu telah keluar dari PinCam!",
+          "Kembali masuk untuk menikmati layanan PinCam",
+          "success"
+        );
+        Navigate("/");
+      }
+    });
   };
 
   return (
@@ -60,7 +52,7 @@ const ProductDetail = () => {
         <div className="container d-flex justify-content-between align-items-center">
           <a
             className="navbar-brand text-success logo h1 align-self-center"
-            href={`/${uid}/dashboard`}
+            href={`/${uid}/dashboardRental`}
           >
             PinCam
           </a>
@@ -84,17 +76,17 @@ const ProductDetail = () => {
             <div className="flex-fill">
               <ul className="nav  mx-lg-auto">
                 <li className="nav-item">
-                  <a className="nav-link" href={`/${uid}/dashboard`}>
+                  <a className="nav-link" href={`/${uid}/dashboardRental`}>
                     Home
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href={`/${uid}/Ptransaksi`}>
+                  <a className="nav-link" href={`/${uid}/RTransaksi`}>
                     Transaksi
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="/">
+                  <a className="nav-link" href={`/${uid}/aboutR`}>
                     About
                   </a>
                 </li>
@@ -114,70 +106,73 @@ const ProductDetail = () => {
                   </div>
                 </div>
               </div>
-
-              <Link to={`/${uid}/profile`} style={{ textDecoration: "none" }}>
-                <div className="nav-icon position-relative text-decoration-none">
-                  <i className="fa fa-fw fa-user text-dark mr-3"></i>
-                  <span className="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark"></span>
-                </div>
-              </Link>
+              <a
+                className="nav-link"
+                style={{ color: "red", cursor: "pointer" }}
+                onClick={onExit}
+              >
+                Keluar
+              </a>
             </div>
           </div>
         </div>
       </nav>
-      {/* <!-- Close Header --> */}
       <div class="container rounded bg-white mt-5 mb-5">
         <div class="row">
           <div class="col-md-3 border-right">
             <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-              <img src={product.gambar} style={{ height: 300, width: 300 }} />
+              <img
+                src={transaksi.gambarProduk}
+                style={{ height: 300, width: 300 }}
+              />
             </div>
           </div>
-          <div class="col-md-5 border-right">
+          <div class="col-md-3 border-right">
             <div class="p-3 py-5">
               <div class="d-flex justify-content-between align-items-center mb-3">
-                <h4 class="text-right">Detail Barang</h4>
+                <h4 class="text-right">Detail Transaksi</h4>
               </div>
 
               {/* Detail Barang */}
               <h6>Nama Barang</h6>
-              <h4>{product.namaProduk}</h4>
-              <br />
-              <h6>Biaya Perjam</h6>
+              <h4>{transaksi.namaProduk}</h4>
+
+              <h6>Biaya Sewa Perjam</h6>
               <h4>
                 {" "}
                 Rp.
                 {biaya.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
               </h4>
-              <br />
-              <h6>Deskripsi</h6>
-              <h4>{product.deskripsi}</h4>
-              <br />
-              <h6>Status Barang</h6>
-              {product.status === "ready" ? (
-                <h4 style={{ color: "green" }}>Ready</h4>
-              ) : (
-                <h4 style={{ color: "red" }}>Sedang Dipinjam Pengguna Lain</h4>
-              )}
 
-              {/* End of Detail Barang */}
+              <h6>Durasi Sewa</h6>
+              <h4>{transaksi.durasiSewa} jam</h4>
+              <h6>Total Biaya Sewa</h6>
+              <h4>
+                {" "}
+                Rp.
+                {total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
+              </h4>
 
               <div class="row mt-2"></div>
-              <div class="mt-2 text-center">
-                <Button
-                  block
-                  text="Ajukan Penyewaan"
-                  color="green"
-                  textColor="white"
-                  onSubmit={handleSubmit}
-                />
-              </div>
             </div>
           </div>
+
+          {/* Informasi Penyewa taruh di sini */}
+        </div>
+        <div class="mt-2 text-center">
+          <Button
+            block
+            text="Terima Permintaan Sewa"
+            color="green"
+            textColor="white"
+            width="70%"
+            //   onSubmit={handleSubmit}
+          />
         </div>
       </div>
+      {/* <!-- Close Header --> */}
     </div>
   );
 };
 
-export default ProductDetail;
+export default DetailTransaksi;

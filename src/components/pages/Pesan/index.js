@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Button } from "../../atoms";
+import { Button, Input } from "../../atoms";
 import firebase from "../../../config/Firebase";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
-const ProductDetail = () => {
+const Pesan = () => {
   const { uid, productID } = useParams();
-  const navigate = useNavigate();
-
+  const Navigate = useNavigate();
   const [product, setProduct] = useState({});
   const [biaya, setBiaya] = useState("");
   const [users, setUsers] = useState({});
+  const [durasi, setDurasi] = useState(null);
 
   useEffect(() => {
     firebase
@@ -40,16 +40,53 @@ const ProductDetail = () => {
   }, []);
 
   const handleSubmit = () => {
-    if (product.status !== "ready") {
+    if (durasi === null || durasi === "") {
       const MySwal = withReactContent(Swal);
 
       MySwal.fire({
         title: <strong>Gagal Mengirimkan Permintaan</strong>,
-        html: <i>Barang Sedang Dipinjam Pengguna Lain</i>,
+        html: <i>Data harus diisi!</i>,
+        icon: "warning",
+      });
+    } else if (!isNaN(+`${durasi}`) === false) {
+      const MySwal = withReactContent(Swal);
+
+      MySwal.fire({
+        title: <strong>Gagal Mengirimkan Permintaan</strong>,
+        html: <i>Masukkan Angka Sebagai durasi perjam</i>,
         icon: "error",
       });
-    } else {
-      navigate(`/${uid}/${productID}/pesan`);
+    } else if (!isNaN(+`${durasi}`) === true && durasi.length > 0) {
+      const total = product.biaya * durasi;
+      const data = {
+        //   data barang
+        namaProduk: product.namaProduk,
+        biayaPerjam: product.biaya,
+        gambarProduk: product.gambar,
+        idProduk: productID,
+
+        // data penyewa
+        fullName: users.fullName,
+        email: users.email,
+        address: users.address,
+        phoneNumber: users.phoneNumber,
+        idPenyewa: uid,
+
+        // data tambahan mengenai transaksi
+        total: total,
+        durasiSewa: durasi,
+        statusTransaksi: "Menunggu Konfirmasi Rental",
+      };
+      firebase.database().ref(`transaksi`).push(data);
+      //   firebase.database().ref(`users/penyewa/${uid}`).push(data);
+      const MySwal = withReactContent(Swal);
+
+      MySwal.fire({
+        title: <strong>Permintaan Sewa Berhasil Dikirimkan</strong>,
+        html: <i>Mohon Tunggu Konfirmasi dari Rental</i>,
+        icon: "success",
+      });
+      Navigate(`/${uid}/PTransaksi`);
     }
   };
 
@@ -136,37 +173,23 @@ const ProductDetail = () => {
           <div class="col-md-5 border-right">
             <div class="p-3 py-5">
               <div class="d-flex justify-content-between align-items-center mb-3">
-                <h4 class="text-right">Detail Barang</h4>
+                <h4 class="text-right">Input Data</h4>
               </div>
+              {/* Form */}
 
-              {/* Detail Barang */}
-              <h6>Nama Barang</h6>
-              <h4>{product.namaProduk}</h4>
-              <br />
-              <h6>Biaya Perjam</h6>
-              <h4>
-                {" "}
-                Rp.
-                {biaya.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
-              </h4>
-              <br />
-              <h6>Deskripsi</h6>
-              <h4>{product.deskripsi}</h4>
-              <br />
-              <h6>Status Barang</h6>
-              {product.status === "ready" ? (
-                <h4 style={{ color: "green" }}>Ready</h4>
-              ) : (
-                <h4 style={{ color: "red" }}>Sedang Dipinjam Pengguna Lain</h4>
-              )}
-
-              {/* End of Detail Barang */}
-
+              <Input
+                className="form-control"
+                label="Durasi Peminjaman"
+                placeholder="Contoh: 1 *Artinya 1 jam"
+                value={durasi}
+                onChange={(event) => setDurasi(event.target.value)}
+              />
+              {/* End of Form */}
               <div class="row mt-2"></div>
-              <div class="mt-2 text-center">
+              <div class=" text-center">
                 <Button
                   block
-                  text="Ajukan Penyewaan"
+                  text="Kirim"
                   color="green"
                   textColor="white"
                   onSubmit={handleSubmit}
@@ -180,4 +203,4 @@ const ProductDetail = () => {
   );
 };
 
-export default ProductDetail;
+export default Pesan;

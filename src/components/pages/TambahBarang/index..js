@@ -50,6 +50,7 @@ const TambahBarang = () => {
         biaya: harga,
         deskripsi: deskripsi,
         gambar: gambar,
+        status: "ready",
       };
 
       firebase.database().ref(`users/rental/${uid}/barang`).push(data);

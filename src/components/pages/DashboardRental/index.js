@@ -84,7 +84,7 @@ const DashboardRental = () => {
         <div className="container d-flex justify-content-between align-items-center">
           <a
             className="navbar-brand text-success logo h1 align-self-center"
-            href="index.html"
+            href={`/${uid}/dashboardRental`}
           >
             PinCam
           </a>
@@ -113,16 +113,39 @@ const DashboardRental = () => {
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="/about">
-                    About
+                  <a className="nav-link" href={`/${uid}/RTransaksi`}>
+                    Transaksi
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" onClick={onExit}>
-                    Keluar
+                  <a className="nav-link" href={`/${uid}/aboutR`}>
+                    About
                   </a>
                 </li>
               </ul>
+            </div>
+            <div className="navbar align-self-center d-flex">
+              <div className="d-lg-none flex-sm-fill mt-3 mb-4 col-7 col-sm-auto pr-3">
+                <div className="input-group">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="inputMobileSearch"
+                    placeholder="Search ..."
+                  />
+                  <div className="input-group-text">
+                    <i className="fa fa-fw fa-search"></i>
+                  </div>
+                </div>
+              </div>
+
+              <a
+                className="nav-link"
+                style={{ color: "red", cursor: "pointer" }}
+                onClick={onExit}
+              >
+                Keluar
+              </a>
             </div>
           </div>
         </div>

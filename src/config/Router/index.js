@@ -12,6 +12,12 @@ import DashboardRental from "../../components/pages/DashboardRental";
 import TambahBarang from "../../components/pages/TambahBarang/index.";
 import UpdatePage from "../../components/pages/UpdatePage";
 import ProductDetail from "../../components/pages/ProductDetail";
+import AboutP from "../../components/pages/AboutP";
+import AboutR from "../../components/pages/AboutR";
+import Pesan from "../../components/pages/Pesan";
+import PTransaksi from "../../components/pages/PTransaksi";
+import RTransaksi from "../../components/pages/RTransaksi";
+import DetailTransaksi from "../../components/pages/DetailTransaksi";
 
 const RouterConfig = () => {
   return (
@@ -31,6 +37,15 @@ const RouterConfig = () => {
         <Route path="/:uid/editProfile" element={<EditProfile />}></Route>
         <Route path="/:uid/tambahBarang" element={<TambahBarang />}></Route>
         <Route path="/:uid/:productID" element={<ProductDetail />}></Route>
+        <Route path="/:uid/aboutP" element={<AboutP />}></Route>
+        <Route path="/:uid/aboutR" element={<AboutR />}></Route>
+        <Route path="/:uid/:productID/pesan" element={<Pesan />}></Route>
+        <Route path="/:uid/Ptransaksi" element={<PTransaksi />}></Route>
+        <Route path="/:uid/Rtransaksi" element={<RTransaksi />}></Route>
+        <Route
+          path="/:uid/:idTransaksi/detailTransaksi"
+          element={<DetailTransaksi />}
+        ></Route>
       </Routes>
     </BrowserRouter>
   );

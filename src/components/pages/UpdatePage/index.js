@@ -17,6 +17,30 @@ const UpdatePage = () => {
 
   const navigate = useNavigate();
 
+  // const handleStatus = () => {
+  //   navigate(`/${uid}/${idProduk}/status`);
+  // };
+
+  const onExit = () => {
+    Swal.fire({
+      title: "Ingin Keluar?",
+      text: "Klik Yakin untuk Keluar",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yakin",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire(
+          "Kamu telah keluar dari PinCam!",
+          "Kembali masuk untuk menikmati layanan PinCam",
+          "success"
+        );
+        navigate("/");
+      }
+    });
+  };
   const handleSubmit = () => {
     // tidak mengubah semua data
     if (!nama && !biaya && !deskripsi) {
@@ -25,6 +49,7 @@ const UpdatePage = () => {
         deskripsi: produk.deskripsi,
         biaya: produk.biaya,
         gambar: produk.gambar,
+        status: produk.status,
       };
 
       firebase
@@ -47,6 +72,7 @@ const UpdatePage = () => {
         deskripsi: deskripsi,
         biaya: produk.biaya,
         gambar: produk.gambar,
+        status: produk.status,
       };
 
       firebase
@@ -69,6 +95,7 @@ const UpdatePage = () => {
         deskripsi: produk.deskripsi,
         biaya: biaya,
         gambar: produk.gambar,
+        status: produk.status,
       };
 
       firebase
@@ -91,6 +118,7 @@ const UpdatePage = () => {
         deskripsi: produk.deskripsi,
         biaya: produk.biaya,
         gambar: produk.gambar,
+        status: produk.status,
       };
 
       firebase
@@ -113,6 +141,7 @@ const UpdatePage = () => {
         deskripsi: produk.deskripsi,
         biaya: biaya,
         gambar: produk.gambar,
+        status: produk.status,
       };
 
       firebase
@@ -135,6 +164,7 @@ const UpdatePage = () => {
         deskripsi: deskripsi,
         biaya: produk.biaya,
         gambar: produk.gambar,
+        status: produk.status,
       };
 
       firebase
@@ -157,6 +187,7 @@ const UpdatePage = () => {
         deskripsi: deskripsi,
         biaya: biaya,
         gambar: produk.gambar,
+        status: produk.status,
       };
 
       firebase
@@ -179,6 +210,7 @@ const UpdatePage = () => {
         deskripsi: deskripsi,
         biaya: biaya,
         gambar: produk.gambar,
+        status: produk.status,
       };
 
       firebase
@@ -269,27 +301,14 @@ const UpdatePage = () => {
                   </div>
                 </div>
               </div>
+
               <a
-                className="nav-icon d-none d-lg-inline"
-                href="#"
-                data-bs-toggle="modal"
-                data-bs-target="#templatemo_search"
+                className="nav-link"
+                style={{ color: "red", cursor: "pointer" }}
+                onClick={onExit}
               >
-                <i className="fa fa-fw fa-search text-dark mr-2"></i>
+                Keluar
               </a>
-              <a
-                className="nav-icon position-relative text-decoration-none"
-                href="#"
-              >
-                <i className="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
-                <span className="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark"></span>
-              </a>
-              <Link to={`/${uid}/profile`} style={{ textDecoration: "none" }}>
-                <div className="nav-icon position-relative text-decoration-none">
-                  <i className="fa fa-fw fa-user text-dark mr-3"></i>
-                  <span className="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark"></span>
-                </div>
-              </Link>
             </div>
           </div>
         </div>
@@ -301,8 +320,13 @@ const UpdatePage = () => {
           <div class="col-md-5 border-right">
             <img
               src={`${produk.gambar}`}
-              style={{ height: 400, width: 400, marginTop: 100 }}
+              style={{ height: 400, width: 400, marginTop: 42 }}
             />
+            <div style={{ textAlign: "center" }}>
+              <h3 style={{ color: "green" }}>
+                Status Barang: {produk.status}{" "}
+              </h3>
+            </div>
           </div>
           <div class="col-md-5 border-right">
             <div class="p-3 py-5">
