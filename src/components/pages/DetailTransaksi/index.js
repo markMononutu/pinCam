@@ -157,7 +157,28 @@ const DetailTransaksi = () => {
             </div>
           </div>
 
-          {/* Informasi Penyewa taruh di sini */}
+          {/* Informasi Penyewa */}
+          <div class="col-md-3 border-right">
+            <div class="p-3 py-5">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="text-right">Informasi Penyewa</h4>
+              </div>
+
+              {/* Info Penyewa */}
+              <h6>Nama Penyewa</h6>
+              <h4>{transaksi.fullName}</h4>
+
+              <h6>Email</h6>
+              <h4>{transaksi.email}</h4>
+
+              <h6>Nomor Telepon</h6>
+              <h4>{transaksi.phoneNumber}</h4>
+              <h6>Alamat</h6>
+              <h4>{transaksi.address}</h4>
+
+              <div class="row mt-2"></div>
+            </div>
+          </div>
         </div>
         <div class="mt-2 text-center">
           <Button
