@@ -116,6 +116,41 @@ const AboutR = () => {
         </div>
       </nav>
       {/* <!-- Close Header --> */}
+      <div className="mt-5 ms-5">
+        <h4 style={{ textAlign: "justify", width: "50%" }}>
+          Aplikasi memiliki tujuan untuk memberikan kemudahan dalam menyewa
+          peralatan yang berhubungan dengan fotografi dan semua yang diperlukan
+          oleh Content Creator
+        </h4>
+        <h4 style={{ textAlign: "justify", width: "50%" }}>
+          Aplikasi ini adalah Project dari kelas Full-Stack Web Development,
+          Fakultas Ilmu Komputer, Universitas Klabat.
+        </h4>
+        <br />
+        <br />
+        <h5>Pembuat Aplikasi :</h5>
+        <ul>
+          <li>Mark Jibril Mononutu</li>
+          <li>Claudio Sebastian Mambu</li>
+        </ul>
+        <br />
+
+        <h5>Dosen Pengampu:</h5>
+        <ul>
+          <li>Reymon Rotikan, S.Kom., MS.</li>
+        </ul>
+        <br />
+        <h5>Teknologi yang digunakan :</h5>
+        <ul>
+          <li>
+            Bahasa Pemrograman : <i class="fab fa-js"></i> Javascript
+          </li>
+          <li>
+            Library untuk Front-End : <i class="fab fa-react"></i> ReactJS
+          </li>
+          <li>Database : Firebase</li>
+        </ul>
+      </div>
     </div>
   );
 };
