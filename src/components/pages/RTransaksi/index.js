@@ -126,37 +126,18 @@ const RTransaksi = () => {
       </nav>
       {/* <!-- Close Header --> */}
 
-      <h3 className="mt-5 ms-5">Daftar Permintaan</h3>
+      <h3 className="mt-5 ms-5">Daftar Transaksi</h3>
       {transaksi ? (
-        transaksi
-          .filter((item) => item.statusTransaksi.includes("Menunggu"))
-          .map((key) => (
-            <RTransaksiCard
-              gambar={`${key.gambarProduk}`}
-              namaProduk={key.namaProduk}
-              link={`/${uid}/${key.id}/detailTransaksi`}
-              durasi={`${key.durasiSewa} jam`}
-              total={key.total}
-              status={key.statusTransaksi}
-            />
-          ))
-      ) : (
-        <h4>Belum Ada Transaksi</h4>
-      )}
-      <h3 className="mt-5 ms-5">Transaksi Berlangsung</h3>
-      {transaksi ? (
-        transaksi
-          .filter((item) => item.statusTransaksi.includes("Dipinjamkan"))
-          .map((key) => (
-            <RTransaksiCard
-              gambar={`${key.gambarProduk}`}
-              namaProduk={key.namaProduk}
-              link={`/${uid}/${key.id}/detailTransaksi`}
-              durasi={`${key.durasiSewa} jam`}
-              total={key.total}
-              status={key.statusTransaksi}
-            />
-          ))
+        transaksi.map((key) => (
+          <RTransaksiCard
+            gambar={`${key.gambarProduk}`}
+            namaProduk={key.namaProduk}
+            link={`/${uid}/${key.id}/detailTransaksi`}
+            durasi={`${key.durasiSewa} jam`}
+            total={key.total}
+            status={key.statusTransaksi}
+          />
+        ))
       ) : (
         <h4>Belum Ada Transaksi</h4>
       )}

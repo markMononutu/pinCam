@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import { Button } from "../../atoms";
 import firebase from "../../../config/Firebase";
+import withReactContent from "sweetalert2-react-content";
 
 const DetailTransaksi = () => {
   const { uid, idTransaksi } = useParams();
@@ -23,6 +24,65 @@ const DetailTransaksi = () => {
         }
       });
   }, []);
+
+  const handleTerima = () => {
+    firebase
+      .database()
+      .ref(`users/rental/${uid}/barang/${transaksi.idProduk}/status`)
+      .set("disewakan");
+    firebase
+      .database()
+      .ref(`transaksi/${idTransaksi}/statusTransaksi`)
+      .set("Diproses");
+
+    const MySwal = withReactContent(Swal);
+
+    MySwal.fire({
+      title: <strong>Permintaan Sewa Diterima!</strong>,
+      html: <i>Hubungi Penyewa</i>,
+      icon: "success",
+    });
+  };
+
+  const handlePinjam = () => {
+    firebase
+      .database()
+      .ref(`users/rental/${uid}/barang/${transaksi.idProduk}/status`)
+      .set("disewakan");
+    firebase
+      .database()
+      .ref(`transaksi/${idTransaksi}/statusTransaksi`)
+      .set("Sedang dipinjam");
+
+    const MySwal = withReactContent(Swal);
+
+    MySwal.fire({
+      title: <strong>Barang Sudah Disewakan!</strong>,
+      html: <i>Mohon menunggu penyewa mengembalikan barang</i>,
+      icon: "success",
+    });
+  };
+
+  const handleSelesai = () => {
+    firebase
+      .database()
+      .ref(`users/rental/${uid}/barang/${transaksi.idProduk}/status`)
+      .set("ready");
+    firebase
+      .database()
+      .ref(`transaksi/${idTransaksi}/statusTransaksi`)
+      .set("Transaksi selesai");
+
+    const MySwal = withReactContent(Swal);
+
+    MySwal.fire({
+      title: <strong>Transaksi Telah Selesai!</strong>,
+      html: (
+        <i>Pastikan barang yang telah dikembalikan berfungsi dengan baik</i>
+      ),
+      icon: "success",
+    });
+  };
 
   const onExit = () => {
     Swal.fire({
@@ -180,16 +240,50 @@ const DetailTransaksi = () => {
             </div>
           </div>
         </div>
-        <div class="mt-2 text-center">
-          <Button
-            block
-            text="Terima Permintaan Sewa"
-            color="green"
-            textColor="white"
-            width="70%"
-            //   onSubmit={handleSubmit}
-          />
-        </div>
+        {transaksi.statusTransaksi === "Menunggu Konfirmasi Rental" && (
+          <div class="mt-2 text-center">
+            <Button
+              block
+              text="Terima Permintaan Sewa"
+              color="green"
+              textColor="white"
+              width="70%"
+              onSubmit={handleTerima}
+            />
+          </div>
+        )}
+
+        {transaksi.statusTransaksi === "Diproses" && (
+          <div class="mt-2 text-center">
+            <Button
+              block
+              text="Pinjamkan Barang"
+              color="green"
+              textColor="white"
+              width="70%"
+              onSubmit={handlePinjam}
+            />
+          </div>
+        )}
+
+        {transaksi.statusTransaksi === "Sedang dipinjam" && (
+          <div class="mt-2 text-center">
+            <Button
+              block
+              text="Selesaikan Transaksi"
+              color="green"
+              textColor="white"
+              width="70%"
+              onSubmit={handleSelesai}
+            />
+          </div>
+        )}
+
+        {transaksi.statusTransaksi === "Transaksi selesai" && (
+          <div class="mt-2 text-center">
+            <h2 style={{ color: "green" }}>Transaksi ini telah selesai</h2>
+          </div>
+        )}
       </div>
       {/* <!-- Close Header --> */}
     </div>
