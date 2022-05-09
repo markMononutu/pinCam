@@ -164,6 +164,11 @@ const Profile = () => {
                   </a>
                 </li>
                 <li className="nav-item">
+                  <a className="nav-link" href={`/${uid}/Ptransaksi`}>
+                    Transaksi
+                  </a>
+                </li>
+                <li className="nav-item">
                   <a className="nav-link" href="/">
                     About
                   </a>
@@ -184,21 +189,7 @@ const Profile = () => {
                   </div>
                 </div>
               </div>
-              <a
-                className="nav-icon d-none d-lg-inline"
-                href="#"
-                data-bs-toggle="modal"
-                data-bs-target="#templatemo_search"
-              >
-                <i className="fa fa-fw fa-search text-dark mr-2"></i>
-              </a>
-              <a
-                className="nav-icon position-relative text-decoration-none"
-                href="#"
-              >
-                <i className="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
-                <span className="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark"></span>
-              </a>
+
               <Link to={`/${uid}/profile`} style={{ textDecoration: "none" }}>
                 <div className="nav-icon position-relative text-decoration-none">
                   <i className="fa fa-fw fa-user text-dark mr-3"></i>

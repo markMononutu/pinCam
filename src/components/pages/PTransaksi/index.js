@@ -1,36 +1,16 @@
-import React, { useState, useEffect } from "react";
-import "../../../components/assets/css/templatemo.min.css";
-import "../../../components/assets/css/templatemo.css";
-import "../../../components/assets/css/custom.css";
-import "../../../components/assets/css/bootstrap.min.css";
-import "../../../App.css";
-
-import { useParams, Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import firebase from "../../../config/Firebase";
-import ProdukCard from "../../molecule/ProductCard";
-import { Input } from "../../atoms";
+import TransaksiCard from "../../molecule/TransaksiCard";
 
-const Dashboard = () => {
+const PTransaksi = () => {
   const { uid } = useParams();
-  const [onPenyewa, setOnPenyewa] = useState(false);
-  const [barang, setBarang] = useState([]);
-  const [search, setSearch] = useState("");
+  const [transaksi, setTransaksi] = useState([]);
 
   useEffect(() => {
     firebase
       .database()
-      .ref(`users/penyewa/${uid}`)
-      .on("value", (res) => {
-        if (res.val()) {
-          setOnPenyewa(true);
-        }
-      });
-  }, []);
-
-  useEffect(() => {
-    firebase
-      .database()
-      .ref(`users/rental/PmpiG950r3ZsLxuvx6tdTX6rEvg1/barang`)
+      .ref(`transaksi`)
       .on("value", (res) => {
         if (res.val()) {
           //ubah menjadi array object
@@ -43,14 +23,13 @@ const Dashboard = () => {
               ...rawData[key],
             });
           });
-          setBarang(productArray);
+          setTransaksi(productArray);
 
           // console.log(products);
         }
       });
   }, []);
-
-  return onPenyewa === true ? (
+  return (
     <div>
       {/* Start Header */}
       <nav className="navbar navbar-expand-lg navbar-light shadow">
@@ -86,7 +65,7 @@ const Dashboard = () => {
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href={`/${uid}/PTransaksi`}>
+                  <a className="nav-link" href={`/${uid}/Ptransaksi`}>
                     Transaksi
                   </a>
                 </li>
@@ -123,56 +102,26 @@ const Dashboard = () => {
         </div>
       </nav>
       {/* <!-- Close Header --> */}
-      <Input
-        placeholder="Cari barang"
-        className="form-control ms-3"
-        value={search}
-        onChange={(event) => setSearch(event.target.value)}
-      />
 
-      <div style={{ paddingLeft: 20 }}>
-        {search.length === 0 ? (
-          barang ? (
-            <div className="productContainer">
-              {barang.map((key) => (
-                <ProdukCard
-                  gambar={`${key.gambar}`}
-                  namaProduk={key.namaProduk}
-                  link={`/${uid}/${key.id}`}
-                />
-              ))}
-            </div>
-          ) : (
-            <div>
-              <h1>Tidak ada barang</h1>
-            </div>
-          )
-        ) : (
-          <div className="productContainer">
-            {barang
-              .filter((produk) =>
-                produk.namaProduk.toLowerCase().includes(search.toLowerCase())
-              )
-              .map((key) => (
-                <ProdukCard
-                  gambar={`${key.gambar}`}
-                  namaProduk={key.namaProduk}
-                  link={`/${uid}/${key.id}`}
-                />
-              ))}
-          </div>
-        )}
-      </div>
-    </div>
-  ) : (
-    <div>
-      <h1>Memuat...</h1>
-      <h1>
-        Jika tetap berada pada halaman ini, kamu mungkin tidak menggunakan akun
-        penyewa
-      </h1>
+      <h3 className="mt-5 ms-5">Daftar Transaksi</h3>
+      {transaksi ? (
+        transaksi
+          .filter((item) => item.idPenyewa.includes(uid))
+          .map((key) => (
+            <TransaksiCard
+              gambar={`${key.gambarProduk}`}
+              namaProduk={key.namaProduk}
+              // link={`/${uid}/${key.id}`}
+              durasi={`${key.durasiSewa} jam`}
+              total={key.total}
+              status={key.statusTransaksi}
+            />
+          ))
+      ) : (
+        <h4>Belum Ada Transaksi</h4>
+      )}
     </div>
   );
 };
 
-export default Dashboard;
+export default PTransaksi;
